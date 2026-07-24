@@ -1,0 +1,62 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOriginPatterns: "*"
+            allowedMethods: [GET, POST, PUT, DELETE, OPTIONS]
+            allowedHeaders: "*"
+            allowCredentials: true
+      routes:
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/users/**
+
+        - id: trading-service
+          uri: lb://trading-service
+          predicates:
+            - Path=/api/trading/**
+
+        - id: portfolio-service
+          uri: lb://portfolio-service
+          predicates:
+            - Path=/api/portfolio/**
+
+        - id: market-data-service
+          uri: lb://market-data-service
+          predicates:
+            - Path=/api/market/**
+
+        - id: notification-service
+          uri: lb://notification-service
+          predicates:
+            - Path=/api/notifications/**
+
+        - id: notification-websocket
+          uri: lb:ws://notification-service
+          predicates:
+            - Path=/ws/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka/}
+  instance:
+    prefer-ip-address: true
+
+security:
+  jwt:
+    secret: ${JWT_SECRET:change-this-to-a-256-bit-secret-in-production-env}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus

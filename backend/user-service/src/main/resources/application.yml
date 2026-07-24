@@ -1,0 +1,52 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: user-service
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/user_db}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:postgres}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: 6379
+  cache:
+    type: redis
+    redis:
+      time-to-live: 60000
+  kafka:
+    bootstrap-servers: ${KAFKA_BROKERS:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      acks: all
+      retries: 3
+      properties:
+        enable.idempotence: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka/}
+  instance:
+    prefer-ip-address: true
+
+security:
+  jwt:
+    secret: ${JWT_SECRET:change-this-to-a-256-bit-secret-in-production-env}
+    access-expiry-ms: 900000
+    refresh-expiry-ms: 604800000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus

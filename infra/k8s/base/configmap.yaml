@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: stock-sim-config
+  namespace: stock-sim
+data:
+  EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "http://service-discovery:8761/eureka/"
+  KAFKA_BROKERS: "kafka:9092"
+  REDIS_HOST: "redis"
+  SPRING_PROFILES_ACTIVE: "production"

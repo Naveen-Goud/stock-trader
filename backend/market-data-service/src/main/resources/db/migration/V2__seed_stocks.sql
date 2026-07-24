@@ -1,0 +1,22 @@
+INSERT INTO stocks (symbol, company_name, sector, current_price, previous_close, volatility, drift, market_cap)
+VALUES
+    ('AAPL',  'Apple Inc.',               'Technology',   189.50, 189.50, 0.0180, 0.00005, 2950000000000.00),
+    ('MSFT',  'Microsoft Corporation',    'Technology',   420.30, 420.30, 0.0160, 0.00006, 3120000000000.00),
+    ('GOOGL', 'Alphabet Inc.',            'Technology',   175.80, 175.80, 0.0190, 0.00004, 2200000000000.00),
+    ('AMZN',  'Amazon.com Inc.',          'Consumer',     185.40, 185.40, 0.0200, 0.00005, 1930000000000.00),
+    ('NVDA',  'NVIDIA Corporation',       'Technology',   875.20, 875.20, 0.0280, 0.00008, 2150000000000.00),
+    ('META',  'Meta Platforms Inc.',      'Technology',   510.60, 510.60, 0.0220, 0.00005, 1290000000000.00),
+    ('TSLA',  'Tesla Inc.',               'Automotive',   175.30, 175.30, 0.0350, 0.00003, 558000000000.00),
+    ('JPM',   'JPMorgan Chase & Co.',     'Finance',      196.20, 196.20, 0.0140, 0.00004, 565000000000.00),
+    ('JNJ',   'Johnson & Johnson',        'Healthcare',   147.50, 147.50, 0.0120, 0.00003, 354000000000.00),
+    ('XOM',   'Exxon Mobil Corporation',  'Energy',       104.70, 104.70, 0.0160, 0.00002, 418000000000.00),
+    ('V',     'Visa Inc.',                'Finance',      278.90, 278.90, 0.0130, 0.00004, 573000000000.00),
+    ('WMT',   'Walmart Inc.',             'Consumer',     68.40,  68.40,  0.0110, 0.00003, 549000000000.00),
+    ('PG',    'Procter & Gamble Co.',     'Consumer',     161.20, 161.20, 0.0100, 0.00002, 380000000000.00),
+    ('MA',    'Mastercard Incorporated',  'Finance',      466.80, 466.80, 0.0140, 0.00004, 430000000000.00),
+    ('HD',    'The Home Depot Inc.',      'Retail',       342.10, 342.10, 0.0150, 0.00003, 340000000000.00),
+    ('BAC',   'Bank of America Corp.',    'Finance',      38.70,  38.70,  0.0170, 0.00003, 305000000000.00),
+    ('DIS',   'The Walt Disney Company',  'Entertainment',110.40, 110.40, 0.0200, 0.00002, 202000000000.00),
+    ('NFLX',  'Netflix Inc.',             'Entertainment',625.30, 625.30, 0.0240, 0.00005, 268000000000.00),
+    ('ADBE',  'Adobe Inc.',               'Technology',   465.20, 465.20, 0.0210, 0.00004, 205000000000.00),
+    ('CRM',   'Salesforce Inc.',          'Technology',   302.40, 302.40, 0.0200, 0.00004, 293000000000.00);
