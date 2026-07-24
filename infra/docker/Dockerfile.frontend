@@ -1,0 +1,26 @@
+# Stage 1: Build
+FROM node:20-alpine AS builder
+WORKDIR /app
+
+COPY package.json package-lock.json* ./
+RUN npm install
+
+COPY . .
+ARG VITE_API_BASE_URL
+ARG VITE_WS_BASE_URL
+ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
+ENV VITE_WS_BASE_URL=${VITE_WS_BASE_URL}
+RUN npm run build
+
+# Stage 2: Serve with Nginx
+FROM nginx:1.27-alpine
+
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# nginx.conf lives inside the frontend folder (the build context for this
+# image), so this COPY path is always valid regardless of host OS or shell.
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+HEALTHCHECK --interval=30s --timeout=3s CMD wget --spider -q http://localhost/ || exit 1
+CMD ["nginx", "-g", "daemon off;"]

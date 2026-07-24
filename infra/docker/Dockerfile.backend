@@ -1,0 +1,47 @@
+# Stage 1: Build
+FROM eclipse-temurin:21-jdk-alpine AS builder
+WORKDIR /build
+
+# eclipse-temurin images ship the JDK only -- Maven is not included.
+RUN apk add --no-cache maven
+
+ARG SERVICE_NAME
+
+# Install the parent POM first (non-recursive) so that common-lib and the
+# target service can resolve com.trading:backend-parent locally instead of
+# Maven trying (and failing) to fetch it from Maven Central.
+COPY pom.xml .
+RUN --mount=type=cache,target=/root/.m2 \
+    mvn -q install -N -DskipTests
+
+# Build and install common-lib, which every service depends on.
+COPY common-lib/pom.xml common-lib/
+COPY common-lib/src common-lib/src
+RUN --mount=type=cache,target=/root/.m2 \
+    cd common-lib && mvn -q install -DskipTests
+
+# Build the target service itself.
+COPY ${SERVICE_NAME}/pom.xml ${SERVICE_NAME}/
+COPY ${SERVICE_NAME}/src ${SERVICE_NAME}/src
+RUN --mount=type=cache,target=/root/.m2 \
+    cd ${SERVICE_NAME} && mvn -q package -DskipTests
+
+# Stage 2: Runtime
+FROM eclipse-temurin:21-jre-alpine
+ARG SERVICE_NAME
+WORKDIR /app
+
+RUN addgroup -S spring && adduser -S spring -G spring
+USER spring:spring
+
+COPY --from=builder /build/${SERVICE_NAME}/target/*.jar app.jar
+
+EXPOSE 8080
+ENTRYPOINT ["java", \
+    "-XX:+UseContainerSupport", \
+    "-XX:MaxRAMPercentage=75.0", \
+    "-Djava.security.egd=file:/dev/./urandom", \
+    "-jar", "app.jar"]
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=3 \
+    CMD wget --spider -q http://localhost:8080/actuator/health || exit 1

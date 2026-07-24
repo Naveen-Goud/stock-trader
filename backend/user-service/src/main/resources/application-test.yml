@@ -1,0 +1,15 @@
+spring:
+  flyway:
+    enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  data:
+    redis:
+      host: localhost
+      port: 6379
+security:
+  jwt:
+    secret: test-secret-key-for-junit-tests-minimum-32-characters-long
+    access-expiry-ms: 900000
+    refresh-expiry-ms: 604800000
